@@ -9,8 +9,8 @@ import (
 type gender int
 
 const (
-	FEMALE gender = iota
-	MALE
+	GenderFemale gender = iota
+	GenderMale
 )
 
 type Name struct {
@@ -25,9 +25,9 @@ func NewName(firstName, lastName string) Name {
 func RandomName(gender gender) Name {
 	var firstNameSet []string
 	switch gender {
-	case MALE:
+	case GenderMale:
 		firstNameSet = data.MaleNames
-	case FEMALE:
+	case GenderFemale:
 		firstNameSet = data.FemaleNames
 	default:
 		firstNameSet = data.FemaleNames
