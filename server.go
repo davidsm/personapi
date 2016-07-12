@@ -18,5 +18,5 @@ func handleRequest(res http.ResponseWriter, req *http.Request) {
 func main() {
 	fmt.Println("Starting server")
 	http.HandleFunc("/", handleRequest)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe("127.0.0.1:8080", nil)
 }
