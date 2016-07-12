@@ -2,10 +2,6 @@ package person
 
 import (
 	"github.com/davidsm/personapi/data"
-	"math/rand"
-	"time"
-)
-
 type gender int
 
 const (
@@ -33,11 +29,7 @@ func RandomName(gender gender) Name {
 		firstNameSet = data.FemaleNames
 	}
 
-	firstName := firstNameSet[rand.Intn(len(firstNameSet))]
-	lastName := data.LastNames[rand.Intn(len(data.LastNames))]
+	firstName := firstNameSet[randgen.Intn(len(firstNameSet))]
+	lastName := data.LastNames[randgen.Intn(len(data.LastNames))]
 	return NewName(firstName, lastName)
-}
-
-func init() {
-	rand.Seed(time.Now().UTC().UnixNano())
 }
