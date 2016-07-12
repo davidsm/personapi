@@ -2,12 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"github.com/masenius/personapi/person"
 	"net/http"
 )
 
 const Amount = 10
+
+const DefaultPort = 8080
 
 type Persons []person.Person
 
@@ -36,7 +39,11 @@ func handleRequest(res http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	fmt.Println("Starting server")
+	port := flag.Int("port", DefaultPort, fmt.Sprintf("Port to use. Defaults to %d", DefaultPort))
+	bind := flag.String("bind", "", "Bind to address. Default is empty, meaning 0.0.0.0")
+	flag.Parse()
+	address := fmt.Sprintf("%s:%d", *bind, *port)
+	fmt.Println("Starting server on", address)
 	http.HandleFunc("/", handleRequest)
-	http.ListenAndServe("127.0.0.1:8080", nil)
+	http.ListenAndServe(address, nil)
 }

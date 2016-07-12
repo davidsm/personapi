@@ -1,1 +1,1 @@
-web: personapi
+web: personapi --port $PORT
