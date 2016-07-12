@@ -7,13 +7,30 @@ import (
 	"net/http"
 )
 
-func handleRequest(res http.ResponseWriter, req *http.Request) {
+const Amount = 10
+
+type Persons []person.Person
+
+type PersonResponse struct {
+	Result Persons `json:"result"`
+	Amount int     `json:"amount"`
+}
+
+func CreatePerson() person.Person {
 	gender := person.RandomGender()
 	name := person.RandomName(gender)
 	address := person.RandomAddress()
-	p := person.Person{Name: name, Age: 25, Gender: gender, PostalAddress: address}
+	return person.Person{Name: name, Age: 25, Gender: gender, PostalAddress: address}
+}
+
+func handleRequest(res http.ResponseWriter, req *http.Request) {
+	persons := make(Persons, 0, Amount)
+	for i := 0; i < Amount; i++ {
+		persons = append(persons, CreatePerson())
+	}
+	body := PersonResponse{Amount: Amount, Result: persons}
 	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	if err := json.NewEncoder(res).Encode(p); err != nil {
+	if err := json.NewEncoder(res).Encode(body); err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 	}
 }
