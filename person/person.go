@@ -6,8 +6,9 @@ import (
 )
 
 type Person struct {
-	Name Name `json:"name"`
-	Age  int  `json:"age"`
+	Name   Name   `json:"name"`
+	Age    int    `json:"age"`
+	Gender gender `json:"gender"`
 }
 
 var randgen *rand.Rand

@@ -2,11 +2,6 @@ package person
 
 import (
 	"github.com/davidsm/personapi/data"
-type gender int
-
-const (
-	GenderFemale gender = iota
-	GenderMale
 )
 
 type Name struct {
