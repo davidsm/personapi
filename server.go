@@ -10,7 +10,8 @@ import (
 func handleRequest(res http.ResponseWriter, req *http.Request) {
 	gender := person.RandomGender()
 	name := person.RandomName(gender)
-	p := person.Person{Name: name, Age: 25, Gender: gender}
+	address := person.RandomAddress()
+	p := person.Person{Name: name, Age: 25, Gender: gender, PostalAddress: address}
 	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	if err := json.NewEncoder(res).Encode(p); err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
