@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/davidsm/personapi/person"
+	"github.com/masenius/personapi/person"
 	"net/http"
 )
 

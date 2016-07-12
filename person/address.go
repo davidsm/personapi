@@ -1,7 +1,7 @@
 package person
 
 import (
-	"github.com/davidsm/personapi/data"
+	"github.com/masenius/personapi/data"
 )
 
 type PostalAddress struct {
