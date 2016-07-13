@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/julienschmidt/httprouter"
 	"github.com/masenius/personapi/person"
 	"net/http"
 )
@@ -26,7 +27,7 @@ func CreatePerson() person.Person {
 	return person.Person{Name: name, Age: 25, Gender: gender, PostalAddress: address}
 }
 
-func handleRequest(res http.ResponseWriter, req *http.Request) {
+func handleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	persons := make(Persons, 0, Amount)
 	for i := 0; i < Amount; i++ {
 		persons = append(persons, CreatePerson())
@@ -43,7 +44,10 @@ func main() {
 	bind := flag.String("bind", "", "Bind to address. Default is empty, meaning 0.0.0.0")
 	flag.Parse()
 	address := fmt.Sprintf("%s:%d", *bind, *port)
+
+	router := httprouter.New()
+	router.GET("/", handleRequest)
+
 	fmt.Println("Starting server on", address)
-	http.HandleFunc("/", handleRequest)
-	http.ListenAndServe(address, nil)
+	http.ListenAndServe(address, router)
 }
