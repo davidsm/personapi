@@ -1,43 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"github.com/masenius/personapi/person"
+	"github.com/masenius/personapi/app"
 	"net/http"
 )
 
-const numberOfResults = 10
-
 const defaultPort = 8080
-
-type Persons []person.Person
-
-type PersonResponse struct {
-	Result Persons `json:"result"`
-	Amount int     `json:"amount"`
-}
-
-func CreatePerson() person.Person {
-	gender := person.RandomGender()
-	name := person.RandomName(gender)
-	address := person.RandomAddress()
-	return person.Person{Name: name, Age: 25, Gender: gender, PostalAddress: address}
-}
-
-func handleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	persons := make(Persons, 0, numberOfResults)
-	for i := 0; i < numberOfResults; i++ {
-		persons = append(persons, CreatePerson())
-	}
-	body := PersonResponse{Amount: numberOfResults, Result: persons}
-	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	if err := json.NewEncoder(res).Encode(body); err != nil {
-		res.WriteHeader(http.StatusInternalServerError)
-	}
-}
 
 func main() {
 	port := flag.Int("port", defaultPort, fmt.Sprintf("Port to use. Defaults to %d", defaultPort))
@@ -46,7 +17,7 @@ func main() {
 	address := fmt.Sprintf("%s:%d", *bind, *port)
 
 	router := httprouter.New()
-	router.GET("/", handleRequest)
+	router.GET("/", app.HandleRequest)
 
 	fmt.Println("Starting server on", address)
 	http.ListenAndServe(address, router)
