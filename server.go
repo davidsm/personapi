@@ -9,9 +9,9 @@ import (
 	"net/http"
 )
 
-const Amount = 10
+const numberOfResults = 10
 
-const DefaultPort = 8080
+const defaultPort = 8080
 
 type Persons []person.Person
 
@@ -28,11 +28,11 @@ func CreatePerson() person.Person {
 }
 
 func handleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	persons := make(Persons, 0, Amount)
-	for i := 0; i < Amount; i++ {
+	persons := make(Persons, 0, numberOfResults)
+	for i := 0; i < numberOfResults; i++ {
 		persons = append(persons, CreatePerson())
 	}
-	body := PersonResponse{Amount: Amount, Result: persons}
+	body := PersonResponse{Amount: numberOfResults, Result: persons}
 	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	if err := json.NewEncoder(res).Encode(body); err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
@@ -40,7 +40,7 @@ func handleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Para
 }
 
 func main() {
-	port := flag.Int("port", DefaultPort, fmt.Sprintf("Port to use. Defaults to %d", DefaultPort))
+	port := flag.Int("port", defaultPort, fmt.Sprintf("Port to use. Defaults to %d", defaultPort))
 	bind := flag.String("bind", "", "Bind to address. Default is empty, meaning 0.0.0.0")
 	flag.Parse()
 	address := fmt.Sprintf("%s:%d", *bind, *port)
