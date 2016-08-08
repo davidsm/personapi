@@ -20,7 +20,14 @@ func CreatePerson() person.Person {
 	gender := person.RandomGender()
 	name := person.RandomName(gender)
 	address := person.RandomAddress()
-	return person.Person{Name: name, Age: 25, Gender: gender, PostalAddress: address}
+	birthDate := person.RandomBirthDate()
+	return person.Person{
+		Name:          name,
+		Age:           birthDate.Age(),
+		BirthDate:     birthDate,
+		Gender:        gender,
+		PostalAddress: address,
+	}
 }
 
 func HandleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
