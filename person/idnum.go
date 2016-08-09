@@ -16,9 +16,12 @@ func splitDigits(num int) []int {
 	return digits
 }
 
+// calculateControlNumber calculates the control digit of a Swedish
+// personal identification number ("personnummer")
+// Algorithm can be found at https://www.skatteverket.se/privat/folkbokforing/personnummer/personnumretsuppbyggnad
 func calculateControlNumber(digits []int) int {
+	sum := 0
 	// Multiply each number with 2 or 1 alternatively
-	multiplied := make([]int, len(digits))
 	for i, digit := range digits {
 		var multiple int
 		if i%2 == 0 {
@@ -26,14 +29,9 @@ func calculateControlNumber(digits []int) int {
 		} else {
 			multiple = 1
 		}
-		multiplied[i] = digit * multiple
-	}
 
-	// Calculate the sum. Split numbers >= 10 into individual digits
-	sum := 0
-	for _, num := range multiplied {
-		digits := splitDigits(num)
-		for _, digit := range digits {
+		// Add each result to a total sum. Split numbers >= 10 into individual digits
+		for _, digit := range splitDigits(digit * multiple) {
 			sum += digit
 		}
 	}
