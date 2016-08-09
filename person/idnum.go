@@ -1,5 +1,10 @@
 package person
 
+import (
+	"bytes"
+	"strconv"
+)
+
 func splitDigits(num int) []int {
 	if num == 0 {
 		return []int{0}
@@ -14,6 +19,14 @@ func splitDigits(num int) []int {
 		digits[i], digits[j] = digits[j], digits[i]
 	}
 	return digits
+}
+
+func zeroLeftPad(digits []int, length int) []int {
+	if len(digits) >= length {
+		return digits
+	}
+	out := make([]int, length-len(digits), length)
+	return append(out, digits...)
 }
 
 // calculateControlNumber calculates the control digit of a Swedish
@@ -44,4 +57,48 @@ func calculateControlNumber(digits []int) int {
 	} else {
 		return controlNumber
 	}
+}
+
+// generateBirthNumber generates the "birth number".
+// The number should be a number between 1 and 999,
+// The number is odd for men and even for women
+func generateBirthNumber(gender gender) int {
+	// Number 1-998
+	num := randgen.Intn(998) + 1
+	isEven := num%2 == 0
+	if (gender == GenderMale && isEven) || (gender == GenderFemale && !isEven) {
+		num++
+	}
+	return num
+}
+
+func formatIdNumber(digits []int, separator string) string {
+	var buffer bytes.Buffer
+	for _, digit := range digits[:6] {
+		buffer.WriteString(strconv.Itoa(digit))
+	}
+	buffer.WriteString(separator)
+	for _, digit := range digits[6:] {
+		buffer.WriteString(strconv.Itoa(digit))
+	}
+	return buffer.String()
+}
+
+func GenerateIdNumber(birthDate BirthDate, gender gender) string {
+	digits := make([]int, 0, 9)
+	yearDigits := splitDigits(birthDate.Year)
+	decadeAndYearDigits := yearDigits[len(yearDigits)-2:]
+	digits = append(digits, decadeAndYearDigits...)
+	digits = append(digits, zeroLeftPad(splitDigits(int(birthDate.Month)), 2)...)
+	digits = append(digits, zeroLeftPad(splitDigits(birthDate.Day), 2)...)
+	digits = append(digits, zeroLeftPad(splitDigits(generateBirthNumber(gender)), 3)...)
+	controlNumber := calculateControlNumber(digits)
+	digits = append(digits, controlNumber)
+	var separator string
+	if birthDate.Age() >= 100 {
+		separator = "+"
+	} else {
+		separator = "-"
+	}
+	return formatIdNumber(digits, separator)
 }

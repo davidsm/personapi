@@ -9,6 +9,7 @@ type Person struct {
 	Name          Name          `json:"name"`
 	Age           int           `json:"age"`
 	BirthDate     BirthDate     `json:"birthDate"`
+	IdNumber      string        `json:"idNumber"`
 	Gender        gender        `json:"gender"`
 	PostalAddress PostalAddress `json:"postalAddress"`
 }

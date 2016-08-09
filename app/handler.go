@@ -2,9 +2,10 @@ package app
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/julienschmidt/httprouter"
 	"github.com/masenius/personapi/person"
-	"net/http"
 )
 
 const numberOfResults = 10
@@ -21,10 +22,12 @@ func CreatePerson() person.Person {
 	name := person.RandomName(gender)
 	address := person.RandomAddress()
 	birthDate := person.RandomBirthDate()
+	idNumber := person.GenerateIdNumber(birthDate, gender)
 	return person.Person{
 		Name:          name,
 		Age:           birthDate.Age(),
 		BirthDate:     birthDate,
+		IdNumber:      idNumber,
 		Gender:        gender,
 		PostalAddress: address,
 	}
