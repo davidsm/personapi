@@ -37,6 +37,11 @@ func calculateControlNumber(digits []int) int {
 	}
 
 	// The control number is 10 minus the last digit of the previously
-	// calculated sum
-	return 10 - (sum % 10)
+	// calculated sum. If it's calculated to 10, 0 is used instead
+	controlNumber := 10 - (sum % 10)
+	if controlNumber == 10 {
+		return 0
+	} else {
+		return controlNumber
+	}
 }

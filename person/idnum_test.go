@@ -32,6 +32,7 @@ var controlNumberTests = []struct {
 	{[]int{1, 2, 1, 2, 1, 2, 1, 2, 1}, 2},
 	{[]int{6, 4, 0, 8, 2, 3, 3, 2, 3}, 4},
 	{[]int{5, 5, 0, 5, 1, 2, 2, 4, 0}, 7},
+	{[]int{2, 5, 1, 1, 1, 5, 4, 8, 7}, 0},
 }
 
 func TestCalculateControlNumber(t *testing.T) {
