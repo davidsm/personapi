@@ -1,7 +1,8 @@
-package app
+package main
 
 import (
 	"encoding/json"
+	"github.com/masenius/personapi/app"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -15,7 +16,7 @@ func testHeader(header, expected string, headers http.Header, t *testing.T) {
 }
 
 func TestDefaultReply(t *testing.T) {
-	server := httptest.NewServer(Create())
+	server := httptest.NewServer(app.Create())
 	defer server.Close()
 
 	res, err := http.Get(server.URL)
@@ -25,7 +26,7 @@ func TestDefaultReply(t *testing.T) {
 
 	testHeader("Content-Type", "application/json; charset=UTF-8", res.Header, t)
 
-	var personResponse PersonResponse
+	var personResponse app.PersonResponse
 	err = json.NewDecoder(res.Body).Decode(&personResponse)
 	if err != nil {
 		t.Fatal(err)
