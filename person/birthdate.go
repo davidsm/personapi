@@ -15,9 +15,11 @@ type BirthDate struct {
 func (bd *BirthDate) Age() int {
 	now := time.Now()
 	age := now.Year() - bd.Year
-	if now.Month()-bd.Month < 0 {
+
+	currentMonth := now.Month()
+	if currentMonth-bd.Month < 0 {
 		age--
-	} else if now.Month()-bd.Month == 0 && now.Day() > bd.Day {
+	} else if currentMonth-bd.Month == 0 && now.Day() > bd.Day {
 		age--
 	}
 	return age
@@ -25,9 +27,7 @@ func (bd *BirthDate) Age() int {
 
 func RandomBirthDate() BirthDate {
 	now := time.Now()
-	currentYear := now.Year()
-	currentMonth := now.Month()
-	currentDay := now.Day()
+	currentYear, currentMonth, currentDay := now.Year(), now.Month(), now.Day()
 
 	// This rely on the auto-normalization of time.Date,
 	// so that the date will always be valid (e.g. Apr 31 is converted to
