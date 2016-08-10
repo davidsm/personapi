@@ -8,8 +8,6 @@ import (
 	"github.com/masenius/personapi/person"
 )
 
-const numberOfResults = 10
-
 type Persons []person.Person
 
 type PersonResponse struct {
@@ -34,11 +32,14 @@ func CreatePerson() person.Person {
 }
 
 func HandleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	persons := make(Persons, 0, numberOfResults)
-	for i := 0; i < numberOfResults; i++ {
+	params := req.URL.Query()
+	amount := readAmount(params)
+
+	persons := make(Persons, 0, amount)
+	for i := 0; i < amount; i++ {
 		persons = append(persons, CreatePerson())
 	}
-	body := PersonResponse{Amount: numberOfResults, Result: persons}
+	body := PersonResponse{Amount: amount, Result: persons}
 	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	if err := json.NewEncoder(res).Encode(body); err != nil {
 		res.WriteHeader(http.StatusInternalServerError)

@@ -2,43 +2,65 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/masenius/personapi/app"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/masenius/personapi/app"
 )
+
+type personResponse struct {
+	res     *http.Response
+	persons *app.PersonResponse
+}
+
+func getPerson(url string) (*personResponse, error) {
+	res, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	var persons app.PersonResponse
+	if err := json.NewDecoder(res.Body).Decode(&persons); err != nil {
+		return nil, err
+	}
+	return &personResponse{res, &persons}, nil
+}
 
 func testHeader(header, expected string, headers http.Header, t *testing.T) {
 	actual := headers.Get(header)
 	if actual != expected {
-		t.Errorf("Expected %s to be %s, was %s", header, expected, actual)
+		t.Errorf("Header %s was %s, expected %s", header, actual, expected)
 	}
 }
 
-func TestDefaultReply(t *testing.T) {
+func testAmount(persons *app.PersonResponse, expected int, t *testing.T) {
+	if persons.Amount != expected {
+		t.Errorf("Amount field was %d, expected %d", persons.Amount, expected)
+	}
+
+	if len(persons.Result) != expected {
+		t.Errorf("Number of results was %d, expected %d",
+			len(persons.Result), expected)
+	}
+}
+
+func TestGetPerson(t *testing.T) {
 	server := httptest.NewServer(app.Create())
 	defer server.Close()
 
-	res, err := http.Get(server.URL)
+	response, err := getPerson(server.URL)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	testHeader("Content-Type", "application/json; charset=UTF-8", res.Header, t)
+	testHeader("Content-Type", "application/json; charset=UTF-8", response.res.Header, t)
 
-	var personResponse app.PersonResponse
-	err = json.NewDecoder(res.Body).Decode(&personResponse)
+	// Default amount is 10
+	testAmount(response.persons, 10, t)
+
+	response, err = getPerson(server.URL + "?amount=20")
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	// 10 is temporarily hardcoded as the amount
-	if personResponse.Amount != 10 {
-		t.Error("Expected amount field to be 10, was", personResponse.Amount)
-	}
-
-	if len(personResponse.Result) != personResponse.Amount {
-		t.Errorf("Expected number of results to be the same as the amount field (%d), was %d",
-			personResponse.Amount, len(personResponse.Result))
-	}
+	testAmount(response.persons, 20, t)
 }
