@@ -44,23 +44,29 @@ func testAmount(persons *app.PersonResponse, expected int, t *testing.T) {
 	}
 }
 
+func getPersonTest(url string, t *testing.T) *personResponse {
+	response, err := getPerson(url)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return response
+}
+
 func TestGetPerson(t *testing.T) {
 	server := httptest.NewServer(app.Create())
 	defer server.Close()
 
-	response, err := getPerson(server.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
-
+	response := getPersonTest(server.URL, t)
 	testHeader("Content-Type", "application/json; charset=UTF-8", response.res.Header, t)
-
 	// Default amount is 10
 	testAmount(response.persons, 10, t)
 
-	response, err = getPerson(server.URL + "?amount=20")
-	if err != nil {
-		t.Fatal(err)
-	}
+	response = getPersonTest(server.URL+"?amount=20", t)
 	testAmount(response.persons, 20, t)
+
+	response = getPersonTest(server.URL+"?amount=150", t)
+	testAmount(response.persons, 100, t)
+
+	response = getPersonTest(server.URL+"?amount=-1", t)
+	testAmount(response.persons, 1, t)
 }

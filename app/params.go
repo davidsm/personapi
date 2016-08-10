@@ -25,8 +25,10 @@ func readAmount(params url.Values) int {
 	if err != nil {
 		return defaultAmount
 	}
-	if num < minAmount || num > maxAmount {
-		return defaultAmount
+	if num < minAmount {
+		return minAmount
+	} else if num > maxAmount {
+		return maxAmount
 	}
 	return num
 }
