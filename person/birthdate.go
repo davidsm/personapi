@@ -25,7 +25,7 @@ func (bd *BirthDate) Age() int {
 	return age
 }
 
-func RandomBirthDate() BirthDate {
+func RandomBirthDate() *BirthDate {
 	now := time.Now()
 	currentYear, currentMonth, currentDay := now.Year(), now.Month(), now.Day()
 
@@ -48,5 +48,5 @@ func RandomBirthDate() BirthDate {
 	}
 	day := randgen.Intn(availableDays) + 1
 	date := time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
-	return BirthDate{Year: date.Year(), Month: date.Month(), Day: date.Day()}
+	return &BirthDate{Year: date.Year(), Month: date.Month(), Day: date.Day()}
 }

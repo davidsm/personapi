@@ -1,8 +1,9 @@
 package person
 
 import (
-	"github.com/masenius/personapi/data"
 	"strconv"
+
+	"github.com/masenius/personapi/data"
 )
 
 type PostalAddress struct {
@@ -49,8 +50,8 @@ func randomStreetNumber() string {
 	return strconv.Itoa(number) + letter
 }
 
-func RandomAddress() PostalAddress {
+func RandomAddress() *PostalAddress {
 	pc := randomPostalCode()
 	sa := randomStreetAddress()
-	return PostalAddress{Street: sa.Street, StreetNumber: sa.Number, Code: pc.Code, Locality: pc.Locality}
+	return &PostalAddress{Street: sa.Street, StreetNumber: sa.Number, Code: pc.Code, Locality: pc.Locality}
 }

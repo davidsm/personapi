@@ -9,11 +9,11 @@ type Name struct {
 	LastName  string `json:"lastName"`
 }
 
-func NewName(firstName, lastName string) Name {
-	return Name{FirstName: firstName, LastName: lastName}
+func NewName(firstName, lastName string) *Name {
+	return &Name{FirstName: firstName, LastName: lastName}
 }
 
-func RandomName(gender gender) Name {
+func RandomName(gender gender) *Name {
 	var firstNameSet []string
 	switch gender {
 	case GenderMale:

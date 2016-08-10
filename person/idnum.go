@@ -84,7 +84,7 @@ func formatIdNumber(digits []int, separator string) string {
 	return buffer.String()
 }
 
-func GenerateIdNumber(birthDate BirthDate, gender gender) string {
+func GenerateIdNumber(birthDate *BirthDate, gender gender) string {
 	digits := make([]int, 0, 9)
 	yearDigits := splitDigits(birthDate.Year)
 	decadeAndYearDigits := yearDigits[len(yearDigits)-2:]
