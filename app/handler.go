@@ -15,11 +15,11 @@ type PersonResponse struct {
 	Amount int     `json:"amount"`
 }
 
-func CreatePerson() person.Person {
+func CreatePerson(reqOpts *requestOptions) person.Person {
 	gender := person.RandomGender()
 	name := person.RandomName(gender)
 	address := person.RandomAddress()
-	birthDate := person.RandomBirthDate()
+	birthDate := person.RandomBirthDate(reqOpts.AgeFrom, reqOpts.AgeTo)
 	idNumber := person.GenerateIdNumber(birthDate, gender)
 	return person.Person{
 		Name:          name,
@@ -37,7 +37,7 @@ func HandleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Para
 
 	persons := make(Persons, 0, reqOpts.Amount)
 	for i := 0; i < reqOpts.Amount; i++ {
-		persons = append(persons, CreatePerson())
+		persons = append(persons, CreatePerson(reqOpts))
 	}
 	body := PersonResponse{Amount: reqOpts.Amount, Result: persons}
 	res.Header().Set("Content-Type", "application/json; charset=UTF-8")

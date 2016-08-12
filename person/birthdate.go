@@ -1,10 +1,6 @@
 package person
 
-import (
-	"time"
-)
-
-const maxAge int = 105
+import "time"
 
 type BirthDate struct {
 	Year  int        `json:"year"`
@@ -29,7 +25,11 @@ func (bd *BirthDate) Age() int {
 	return bd.age(now)
 }
 
-func RandomBirthDate() *BirthDate {
+func randomBetween(min, max int) int {
+	return randgen.Intn(max-min) + min
+}
+
+func RandomBirthDate(minAge, maxAge int) *BirthDate {
 	now := time.Now()
 	currentYear, currentMonth, currentDay := now.Year(), now.Month(), now.Day()
 
@@ -38,19 +38,31 @@ func RandomBirthDate() *BirthDate {
 	// May 1). This means that there will be a slight skew in the distribution,
 	// as dates that can be "overflowed" to will appear somewhat more often.
 	// For now, this behavior should be "good enough"
-	year := currentYear - randgen.Intn(maxAge+1)
+	minYear := currentYear - (maxAge + 1)
+	maxYear := currentYear - minAge
+	year := randomBetween(minYear, maxYear+1)
 
-	availableMonths := 12
-	if year == currentYear {
-		availableMonths = int(currentMonth)
+	minMonth := time.January
+	maxMonth := time.December
+	if year == currentYear || year == maxYear {
+		maxMonth = currentMonth
+	} else if year == minYear {
+		minMonth = currentMonth
 	}
-	month := time.Month(randgen.Intn(availableMonths) + 1)
+	month := time.Month(randomBetween(int(minMonth), int(maxMonth)+1))
 
-	availableDays := 31
+	minDay := 1
+	maxDay := 31
 	if year == currentYear && month == currentMonth {
-		availableDays = currentDay
+		maxDay = currentDay
+	} else if year == maxYear && month == maxMonth {
+		maxDay = currentDay
+	} else if year == minYear && month == minMonth {
+		minDay = currentDay + 1
 	}
-	day := randgen.Intn(availableDays) + 1
+
+	day := randomBetween(minDay, maxDay+1)
+
 	date := time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
 	return &BirthDate{Year: date.Year(), Month: date.Month(), Day: date.Day()}
 }

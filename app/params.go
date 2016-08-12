@@ -6,17 +6,24 @@ import (
 )
 
 type requestOptions struct {
-	Amount int
+	Amount  int
+	AgeFrom int
+	AgeTo   int
 }
 
 const (
 	paramAmount = "amount"
+	paramMinAge = "minAge"
+	paramMaxAge = "maxAge"
 )
 
 const (
 	minAmount     = 1
 	maxAmount     = 100
 	defaultAmount = 10
+
+	minAge = 0
+	maxAge = 105
 )
 
 // intBetween takes a param value (string), tries to convert it to an integer,
@@ -35,7 +42,28 @@ func intBetween(value string, min, max, defaultVal int) int {
 	return num
 }
 
+func spanBetween(minValue, maxValue string, min, max int) (int, int) {
+	numMin := intBetween(minValue, min, max, min)
+	numMax := intBetween(maxValue, min, max, max)
+	if numMin > numMax {
+		numMin = min
+		numMax = max
+	}
+	return numMin, numMax
+}
+
 func handleParams(params url.Values) *requestOptions {
 	amount := intBetween(params.Get(paramAmount), minAmount, maxAmount, defaultAmount)
-	return &requestOptions{Amount: amount}
+	ageFrom, ageTo := spanBetween(
+		params.Get(paramMinAge),
+		params.Get(paramMaxAge),
+		minAge,
+		maxAge,
+	)
+
+	return &requestOptions{
+		Amount:  amount,
+		AgeFrom: ageFrom,
+		AgeTo:   ageTo,
+	}
 }
