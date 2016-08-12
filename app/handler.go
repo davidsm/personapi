@@ -33,13 +33,13 @@ func CreatePerson() person.Person {
 
 func HandleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	params := req.URL.Query()
-	amount := readAmount(params)
+	reqOpts := handleParams(params)
 
-	persons := make(Persons, 0, amount)
-	for i := 0; i < amount; i++ {
+	persons := make(Persons, 0, reqOpts.Amount)
+	for i := 0; i < reqOpts.Amount; i++ {
 		persons = append(persons, CreatePerson())
 	}
-	body := PersonResponse{Amount: amount, Result: persons}
+	body := PersonResponse{Amount: reqOpts.Amount, Result: persons}
 	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	if err := json.NewEncoder(res).Encode(body); err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
