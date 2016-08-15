@@ -3,18 +3,22 @@ package app
 import (
 	"net/url"
 	"strconv"
+
+	"github.com/masenius/personapi/person"
 )
 
 type requestOptions struct {
-	Amount  int
-	AgeFrom int
-	AgeTo   int
+	Amount     int
+	AgeFrom    int
+	AgeTo      int
+	OnlyGender *person.Gender
 }
 
 const (
 	paramAmount = "amount"
 	paramMinAge = "minAge"
 	paramMaxAge = "maxAge"
+	paramGender = "gender"
 )
 
 const (
@@ -60,10 +64,16 @@ func handleParams(params url.Values) *requestOptions {
 		minAge,
 		maxAge,
 	)
+	onlyGender := person.Gender(params.Get(paramGender))
+	onlyGenderPtr := &onlyGender
+	if onlyGender != person.GenderMale && onlyGender != person.GenderFemale {
+		onlyGenderPtr = nil
+	}
 
 	return &requestOptions{
-		Amount:  amount,
-		AgeFrom: ageFrom,
-		AgeTo:   ageTo,
+		Amount:     amount,
+		AgeFrom:    ageFrom,
+		AgeTo:      ageTo,
+		OnlyGender: onlyGenderPtr,
 	}
 }

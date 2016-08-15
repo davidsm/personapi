@@ -1,13 +1,13 @@
 package person
 
-type gender string
+type Gender string
 
 const (
-	GenderFemale gender = "female"
-	GenderMale   gender = "male"
+	GenderFemale Gender = "female"
+	GenderMale   Gender = "male"
 )
 
-func RandomGender() gender {
-	genders := [2]gender{GenderFemale, GenderMale}
+func RandomGender() Gender {
+	genders := [2]Gender{GenderFemale, GenderMale}
 	return genders[randgen.Intn(len(genders))]
 }

@@ -16,7 +16,12 @@ type PersonResponse struct {
 }
 
 func createPerson(reqOpts *requestOptions) person.Person {
-	gender := person.RandomGender()
+	var gender person.Gender
+	if reqOpts.OnlyGender != nil {
+		gender = *reqOpts.OnlyGender
+	} else {
+		gender = person.RandomGender()
+	}
 	name := person.RandomName(gender)
 	address := person.RandomAddress()
 	birthDate := person.RandomBirthDate(reqOpts.AgeFrom, reqOpts.AgeTo)

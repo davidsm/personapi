@@ -62,7 +62,7 @@ func calculateControlNumber(digits []int) int {
 // generateBirthNumber generates the "birth number".
 // The number should be a number between 1 and 999,
 // The number is odd for men and even for women
-func generateBirthNumber(gender gender) int {
+func generateBirthNumber(gender Gender) int {
 	// Number 1-998
 	num := randgen.Intn(998) + 1
 	isEven := num%2 == 0
@@ -84,7 +84,7 @@ func formatIdNumber(digits []int, separator string) string {
 	return buffer.String()
 }
 
-func GenerateIdNumber(birthDate *BirthDate, gender gender) string {
+func GenerateIdNumber(birthDate *BirthDate, gender Gender) string {
 	digits := make([]int, 0, 9)
 	yearDigits := splitDigits(birthDate.Year)
 	decadeAndYearDigits := yearDigits[len(yearDigits)-2:]
