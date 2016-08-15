@@ -8,6 +8,6 @@ import (
 
 func Create() http.Handler {
 	router := httprouter.New()
-	router.GET("/", HandleRequest)
+	router.GET("/", handleRequest)
 	return router
 }

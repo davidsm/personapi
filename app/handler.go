@@ -15,7 +15,7 @@ type PersonResponse struct {
 	Amount int     `json:"amount"`
 }
 
-func CreatePerson(reqOpts *requestOptions) person.Person {
+func createPerson(reqOpts *requestOptions) person.Person {
 	gender := person.RandomGender()
 	name := person.RandomName(gender)
 	address := person.RandomAddress()
@@ -31,13 +31,13 @@ func CreatePerson(reqOpts *requestOptions) person.Person {
 	}
 }
 
-func HandleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+func handleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	params := req.URL.Query()
 	reqOpts := handleParams(params)
 
 	persons := make(Persons, 0, reqOpts.Amount)
 	for i := 0; i < reqOpts.Amount; i++ {
-		persons = append(persons, CreatePerson(reqOpts))
+		persons = append(persons, createPerson(reqOpts))
 	}
 	body := PersonResponse{Amount: reqOpts.Amount, Result: persons}
 	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
