@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/masenius/personapi/app"
 	"net/http"
+
+	"github.com/masenius/personapi/app"
 )
 
 const defaultPort = 8080
