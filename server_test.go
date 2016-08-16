@@ -45,6 +45,14 @@ func testAmount(persons *app.PersonResponse, expected int, t *testing.T) {
 	}
 }
 
+func testGender(persons *app.PersonResponse, expected string, t *testing.T) {
+	for _, p := range persons.Result {
+		if string(p.Gender) != expected {
+			t.Errorf("Gender was %s, expected %s", p.Gender, expected)
+		}
+	}
+}
+
 func getPersonTest(url string, t *testing.T) *personResponse {
 	response, err := getPerson(url)
 	if err != nil {
@@ -95,4 +103,10 @@ func TestGetPerson(t *testing.T) {
 
 	response = getPersonTest(server.URL+"?amount=-1", t)
 	testAmount(response.persons, 1, t)
+
+	response = getPersonTest(server.URL+"?gender=male", t)
+	testGender(response.persons, "male", t)
+
+	response = getPersonTest(server.URL+"?gender=female", t)
+	testGender(response.persons, "female", t)
 }
