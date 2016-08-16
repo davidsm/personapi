@@ -16,6 +16,12 @@ type Person struct {
 
 var randgen *rand.Rand
 
+// Seed sets an explicit seed for the random generator.
+// Useful for reproducible tests.
+func Seed(seed int64) {
+	randgen.Seed(seed)
+}
+
 func init() {
 	randgen = rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
 }

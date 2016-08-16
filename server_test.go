@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 
 	"github.com/masenius/personapi/app"
@@ -52,8 +53,33 @@ func getPersonTest(url string, t *testing.T) *personResponse {
 	return response
 }
 
+func TestSetSeed(t *testing.T) {
+	// Test that you get the same "random" generation all the time
+	// when setting the same seed.
+	// A bit wobbly, as it would NOT produce reproducible results in the case of failure...
+	var seed int64 = 12345
+	appOpts := app.Options{
+		Seed: &seed,
+	}
+	server := httptest.NewServer(app.Create(&appOpts))
+	response1 := getPersonTest(server.URL, t)
+	server.Close()
+
+	server = httptest.NewServer(app.Create(&appOpts))
+	response2 := getPersonTest(server.URL, t)
+	server.Close()
+
+	if !reflect.DeepEqual(response1.persons, response2.persons) {
+		t.Errorf("Expected responses to be equal, got %v and %v", response1.persons, response2.persons)
+	}
+}
+
 func TestGetPerson(t *testing.T) {
-	server := httptest.NewServer(app.Create())
+	var seed int64 = 12345
+	appOpts := app.Options{
+		Seed: &seed,
+	}
+	server := httptest.NewServer(app.Create(&appOpts))
 	defer server.Close()
 
 	response := getPersonTest(server.URL, t)

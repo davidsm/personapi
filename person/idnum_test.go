@@ -68,11 +68,9 @@ func TestCalculateControlNumber(t *testing.T) {
 }
 
 func TestGenerateIdNumber(t *testing.T) {
-	// Bit awkward to test things which use random generation.
-	// TODO: Look into setting seed to a fixed value for tests
 	bd := BirthDate{1925, time.November, 15}
 	idNum := GenerateIdNumber(&bd, GenderMale)
-	t.Log("IdNum:", idNum)
+
 	if len(idNum) != 11 {
 		t.Fatal("Expected generated id number to be 11 characters, was", len(idNum))
 	}
@@ -82,7 +80,6 @@ func TestGenerateIdNumber(t *testing.T) {
 
 	bd = BirthDate{1915, time.November, 15}
 	idNum = GenerateIdNumber(&bd, GenderMale)
-	t.Log("IdNum:", idNum)
 	if len(idNum) != 11 {
 		t.Fatal("Expected generated id number to be 11 characters, was", len(idNum))
 	}
