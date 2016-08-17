@@ -54,6 +54,7 @@ func testGender(persons *app.PersonResponse, expected string, t *testing.T) {
 }
 
 func getPersonTest(url string, t *testing.T) *personResponse {
+	t.Log("Requesting", url)
 	response, err := getPerson(url)
 	if err != nil {
 		t.Fatal(err)
