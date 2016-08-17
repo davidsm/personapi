@@ -25,10 +25,6 @@ func (bd *BirthDate) Age() int {
 	return bd.age(now)
 }
 
-func randomBetween(min, max int) int {
-	return randgen.Intn(max-min) + min
-}
-
 func RandomBirthDate(minAge, maxAge int) *BirthDate {
 	now := time.Now()
 	currentYear, currentMonth, currentDay := now.Year(), now.Month(), now.Day()
