@@ -6,12 +6,12 @@ import (
 )
 
 type Person struct {
-	Name          *Name          `json:"name"`
-	Age           int            `json:"age"`
-	BirthDate     *BirthDate     `json:"birthDate"`
-	IdNumber      string         `json:"idNumber"`
-	Gender        Gender         `json:"gender"`
-	PostalAddress *PostalAddress `json:"postalAddress"`
+	Name      *Name      `json:"name"`
+	Age       int        `json:"age"`
+	BirthDate *BirthDate `json:"birthDate"`
+	IdNumber  string     `json:"idNumber"`
+	Gender    Gender     `json:"gender"`
+	Address   *Address   `json:"address"`
 }
 
 var randgen *rand.Rand

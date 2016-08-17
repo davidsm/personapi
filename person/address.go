@@ -6,52 +6,43 @@ import (
 	"github.com/masenius/personapi/data"
 )
 
-type PostalAddress struct {
-	Street       string `json:"streetAddress"`
-	StreetNumber string `json:"streetNumber"`
-	Code         string `json:"code"`
-	Locality     string `json:"locality"`
+type Address struct {
+	Street       string        `json:"streetAddress"`
+	StreetNumber string        `json:"streetNumber"`
+	Code         string        `json:"code"`
+	Locality     string        `json:"locality"`
+	Municipality *municipality `json:"municipality"`
+	Region       *region       `json:"region"`
 }
 
-type postalCode struct {
-	Code     string `json:"code"`
-	Locality string `json:"locality"`
+type municipality struct {
+	Name string `json:"name"`
+	Code string `json:"code"`
 }
 
-type streetAddress struct {
-	Street string `json:"street"`
-	Number string `json:"number"`
+type region struct {
+	Name   string `json:"name"`
+	Code   string `json:"code"`
+	Letter string `json:"letter"`
 }
 
-func randomPostalCode() postalCode {
-	pc := data.PostalCodes[randgen.Intn(len(data.PostalCodes))]
-	return postalCode{pc.Code, pc.Locality}
-}
+func RandomAddress() *Address {
+	addr := data.Addresses[randgen.Intn(len(data.Addresses))]
 
-func randomStreetAddress() streetAddress {
-	return streetAddress{Street: randomStreetName(), Number: randomStreetNumber()}
-}
+	streetNumber := strconv.Itoa(randomBetween(addr.NumMin, addr.NumMax+1))
 
-func randomStreetName() string {
-	return data.StreetNames[randgen.Intn(len(data.StreetNames))]
-}
+	muniName := data.Municipalities[addr.MunicipalityCode]
+	municipality := municipality{muniName, addr.MunicipalityCode}
 
-func randomStreetNumber() string {
-	number := randgen.Intn(75)
-	var letter string
-	// Add a letter in 1/25 cases
-	useLetterRoll := randgen.Intn(25)
-	if useLetterRoll == 0 {
-		// Use A-G as address letters.
-		// Get the codepoint for one of these
-		letterCode := randgen.Intn(7) + 65
-		letter = string(letterCode)
+	regionData := data.Regions[addr.RegionCode]
+	region := region{regionData.Name, addr.RegionCode, regionData.Letter}
+
+	return &Address{
+		Street:       addr.Street,
+		StreetNumber: streetNumber,
+		Code:         addr.Code,
+		Locality:     addr.Locality,
+		Municipality: &municipality,
+		Region:       &region,
 	}
-	return strconv.Itoa(number) + letter
-}
-
-func RandomAddress() *PostalAddress {
-	pc := randomPostalCode()
-	sa := randomStreetAddress()
-	return &PostalAddress{Street: sa.Street, StreetNumber: sa.Number, Code: pc.Code, Locality: pc.Locality}
 }
