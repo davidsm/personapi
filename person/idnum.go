@@ -10,7 +10,7 @@ import (
 // Algorithm can be found at https://www.skatteverket.se/privat/folkbokforing/personnummer/personnumretsuppbyggnad
 func calculateControlNumber(digits []int) int {
 	sum := 0
-	// Multiply each number with 2 or 1 alternatively
+	// Multiply each number with 2 or 1 alternately
 	for i, digit := range digits {
 		var multiple int
 		if i%2 == 0 {
@@ -27,12 +27,7 @@ func calculateControlNumber(digits []int) int {
 
 	// The control number is 10 minus the last digit of the previously
 	// calculated sum. If it's calculated to 10, 0 is used instead
-	controlNumber := 10 - (sum % 10)
-	if controlNumber == 10 {
-		return 0
-	} else {
-		return controlNumber
-	}
+	return (10 - (sum % 10)) % 10
 }
 
 // generateBirthNumber generates the "birth number".
