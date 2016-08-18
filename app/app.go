@@ -18,5 +18,6 @@ func Create(opts *Options) http.Handler {
 
 	router := httprouter.New()
 	router.GET("/", handleRequest)
+	router.HEAD("/", handleRequest)
 	return router
 }
