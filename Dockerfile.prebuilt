@@ -1,0 +1,5 @@
+from scratch
+COPY personapi /
+
+EXPOSE 8080
+ENTRYPOINT ["/personapi"]
