@@ -93,6 +93,8 @@ func TestGetPerson(t *testing.T) {
 
 	response := getPersonTest(server.URL, t)
 	testHeader("Content-Type", "application/json; charset=UTF-8", response.res.Header, t)
+	testHeader("Access-Control-Allow-Origin", "*", response.res.Header, t)
+
 	// Default amount is 10
 	testAmount(response.persons, 10, t)
 
