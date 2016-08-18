@@ -11,7 +11,7 @@ import (
 const defaultPort = 8080
 
 func main() {
-	port := flag.Int("port", defaultPort, fmt.Sprintf("Port to use. Defaults to %d", defaultPort))
+	port := flag.Int("port", defaultPort, fmt.Sprintf("Port to use"))
 	bind := flag.String("bind", "", "Bind to address. Default is empty, meaning 0.0.0.0")
 	seed := flag.Int64("seed", 0, "Specify seed for the random generator. 0 means seed with current time. Not including this argument has the same effect as 0")
 	flag.Parse()
