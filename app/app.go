@@ -1,6 +1,7 @@
 package app
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -8,7 +9,8 @@ import (
 )
 
 type Options struct {
-	Seed *int64
+	Seed   *int64
+	Logger *log.Logger
 }
 
 func Create(opts *Options) http.Handler {
@@ -19,5 +21,10 @@ func Create(opts *Options) http.Handler {
 	router := httprouter.New()
 	router.GET("/", handleRequest)
 	router.HEAD("/", handleRequest)
-	return router
+
+	if opts.Logger == nil {
+		return router
+	}
+
+	return &logHandler{router, opts.Logger}
 }

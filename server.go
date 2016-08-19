@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/masenius/personapi/app"
+	"github.com/masenius/personapi/reqlog"
 )
 
 const defaultPort = 8080
@@ -21,11 +22,15 @@ func main() {
 	if *seed != 0 {
 		seedOpt = seed
 	}
+
+	logger := reqlog.Stdout()
+
 	appOptions := app.Options{
-		Seed: seedOpt,
+		Seed:   seedOpt,
+		Logger: logger,
 	}
 	app := app.Create(&appOptions)
 
-	fmt.Println("Starting server on", address)
-	http.ListenAndServe(address, app)
+	logger.Println("Starting server on", address)
+	logger.Fatal(http.ListenAndServe(address, app))
 }
