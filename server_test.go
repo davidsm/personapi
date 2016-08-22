@@ -2,12 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"reflect"
 	"testing"
 
 	"github.com/masenius/personapi/app"
+	"github.com/masenius/personapi/reqlog"
 )
 
 type personResponse struct {
@@ -112,4 +115,36 @@ func TestGetPerson(t *testing.T) {
 
 	response = getPersonTest(server.URL+"?gender=female", t)
 	testGender(response.persons, "female", t)
+}
+
+func TestFileLog(t *testing.T) {
+	logFile, err := ioutil.TempFile("", "logtest")
+	defer os.Remove(logFile.Name())
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	logger, err := reqlog.File(logFile.Name())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	appOpts := app.Options{
+		Logger: logger,
+	}
+
+	server := httptest.NewServer(app.Create(&appOpts))
+	defer server.Close()
+
+	_ = getPersonTest(server.URL, t)
+
+	logContents, err := ioutil.ReadFile(logFile.Name())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(logContents) == 0 {
+		t.Error("Logfile was empty")
+	}
 }
