@@ -53,8 +53,10 @@ Kör `personapi --help` för att se alternativ
 ```
   -bind string
     	Bind to address. Default is empty, meaning 0.0.0.0
+  -logfile string
+    	Log to file path. If not specified, log to stdout
   -port int
-    	Port to use. Defaults to 8080 (default 8080)
+    	Port to use (default 8080)
   -seed int
     	Specify seed for the random generator. 0 means seed with current time. Not including this argument has the same effect as 0
 ```
