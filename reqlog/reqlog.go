@@ -1,14 +1,15 @@
 package reqlog
 
 import (
+	"io"
 	"log"
 	"os"
 )
 
 const logFlags = log.LstdFlags
 
-func newLogger(file *os.File) *log.Logger {
-	return log.New(file, "", logFlags)
+func newLogger(w io.Writer) *log.Logger {
+	return log.New(w, "", logFlags)
 }
 
 func Stdout() *log.Logger {
