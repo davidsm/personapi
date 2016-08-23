@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-var mobilePrefixes []string = []string{
+var mobilePrefixes = []string{
 	"070",
 	"072",
 	"073",
@@ -13,8 +13,8 @@ var mobilePrefixes []string = []string{
 	"079",
 }
 
-// Only generates mobile numbers for now
 func RandomPhoneNumber() string {
+	// Only generates mobile numbers for now
 	var buffer bytes.Buffer
 	buffer.WriteString(mobilePrefixes[randgen.Intn(len(mobilePrefixes))])
 
