@@ -38,14 +38,31 @@ func createPerson(reqOpts *requestOptions) person.Person {
 	}
 }
 
+func createPersons(reqOpts *requestOptions) Persons {
+	persons := make(Persons, 0, reqOpts.Amount)
+
+	// Store generated id numbers to make sure that there are no duplicates
+	idNums := make(map[string]bool)
+
+	for i := 0; i < reqOpts.Amount; i++ {
+		p := createPerson(reqOpts)
+
+		// Recreate if the same idNumber has already been generated
+		for idNums[p.IdNumber] {
+			p = createPerson(reqOpts)
+		}
+		idNums[p.IdNumber] = true
+
+		persons = append(persons, p)
+	}
+	return persons
+}
+
 func handleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	params := req.URL.Query()
 	reqOpts := handleParams(params)
 
-	persons := make(Persons, 0, reqOpts.Amount)
-	for i := 0; i < reqOpts.Amount; i++ {
-		persons = append(persons, createPerson(reqOpts))
-	}
+	persons := createPersons(reqOpts)
 	body := PersonResponse{Amount: reqOpts.Amount, Result: persons}
 	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	res.Header().Set("Access-Control-Allow-Origin", "*")
