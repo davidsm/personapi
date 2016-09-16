@@ -104,8 +104,8 @@ func TestGetPerson(t *testing.T) {
 	response = getPersonTest(server.URL+"?amount=20", t)
 	testAmount(response.persons, 20, t)
 
-	response = getPersonTest(server.URL+"?amount=251", t)
-	testAmount(response.persons, 250, t)
+	response = getPersonTest(server.URL+"?amount=1001", t)
+	testAmount(response.persons, 1000, t)
 
 	response = getPersonTest(server.URL+"?amount=-1", t)
 	testAmount(response.persons, 1, t)

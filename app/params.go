@@ -23,7 +23,7 @@ const (
 
 const (
 	minAmount     = 1
-	maxAmount     = 250
+	maxAmount     = 1000
 	defaultAmount = 10
 
 	minAge = 0
