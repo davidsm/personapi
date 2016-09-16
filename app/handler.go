@@ -66,6 +66,7 @@ func handleRequest(res http.ResponseWriter, req *http.Request, _ httprouter.Para
 	body := PersonResponse{Amount: reqOpts.Amount, Result: persons}
 	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	res.Header().Set("Access-Control-Allow-Origin", "*")
+	res.Header().Set("Cache-Control", "no-cache")
 	if err := json.NewEncoder(res).Encode(body); err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 	}
