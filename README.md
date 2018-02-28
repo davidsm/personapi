@@ -35,6 +35,7 @@ Bygg en binär för 64-bitars Linux. Om man sitter på Windows kan detta göras 
 @echo off
 
 SETLOCAL
+set CGO_ENABLED=0
 set GOARCH=amd64
 set GOOS=linux
 go build -v %*
@@ -43,7 +44,7 @@ ENDLOCAL
 
 Spara som t.ex. go-cross.bat och kör som `go-cross .` (i projektets rot).
 
-Sitter man redan på 64-bitars Linux räcker `go build .`. På Mac bör `GOOARCH=amd64 GOOS=linux go build .` fungera.
+Sitter man redan på 64-bitars Linux räcker `CGO_ENABLED=0 go build .`. På Mac bör `CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build .` fungera.
 
 När detta är klart ska det finnas en binär, `personapi` i rotmappen. Bygg en Docker-avbild med denna med `docker build --rm -t personapi-tiny --file Dockerfile.prebuilt .`. Kör med `docker run --rm -p 8080:8080 personapi-tiny`.
 
