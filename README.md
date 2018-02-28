@@ -35,7 +35,7 @@ Bygg en binär för 64-bitars Linux. Om man sitter på Windows kan detta göras 
 @echo off
 
 SETLOCAL
-set GOOARCH=amd64
+set GOARCH=amd64
 set GOOS=linux
 go build -v %*
 ENDLOCAL
