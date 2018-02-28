@@ -27,14 +27,16 @@ func createPerson(reqOpts *requestOptions) person.Person {
 	birthDate := person.RandomBirthDate(reqOpts.AgeFrom, reqOpts.AgeTo)
 	idNumber := person.GenerateIdNumber(birthDate, gender)
 	phoneNumber := person.RandomPhoneNumber()
+	email := person.GenerateEmail(name.FirstName, name.LastName)
 	return person.Person{
-		Name:        name,
-		Age:         birthDate.Age(),
-		BirthDate:   birthDate,
-		IdNumber:    idNumber,
-		Gender:      gender,
-		Address:     address,
-		PhoneNumber: phoneNumber,
+		Name:         name,
+		Age:          birthDate.Age(),
+		BirthDate:    birthDate,
+		IdNumber:     idNumber,
+		Gender:       gender,
+		Address:      address,
+		PhoneNumber:  phoneNumber,
+		EmailAddress: email,
 	}
 }
 
